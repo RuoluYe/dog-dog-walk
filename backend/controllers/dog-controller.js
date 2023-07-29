@@ -1,6 +1,8 @@
-const HttpError = require('../models/http-error');
-
+const { validationResult } = require('express-validator');
 const uuid = require('uuid').v4;
+
+const HttpError = require('../models/http-error');
+const getCoords = require('../util/location');
 
 
 let DUMMY_DOGS = [
@@ -42,8 +44,23 @@ const getDogsByUserId = (req,res,next) => {
     res.json({dogs}); 
 };
 
-const createDog = (req, res, next) => {
-    const { title, description, coordinates, address, owner } = req.body;
+const createDog = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      next(
+        new HttpError("Invalid inputs passed, please check your data.", 422)
+      );
+    }
+    const { title, description, address, owner } = req.body;
+
+    let coordinates;
+    try {
+      coordinates = await getCoords(address);
+    } catch (err) {
+      return next(err);
+    }
+       
+
     const createdDog = {
         id: uuid(),
         title,
@@ -59,6 +76,13 @@ const createDog = (req, res, next) => {
 };
 
 const updateDog = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(
+        new HttpError("Invalid inputs passed, please check your data.", 422)
+      );
+    }
+
     const { title, description} = req.body;
     const dogId = req.params.did;
 
@@ -74,8 +98,13 @@ const updateDog = (req, res, next) => {
 
 const deleteDog = (req, res, next) => {
     const dogId = req.params.did
+    const deletedDog = DUMMY_DOGS.find(d => d.id === dogId)
+    if (!deletedDog) {
+        throw new HttpError('Could not find a dog for this id.', 404);
+    }
+    
     DUMMY_DOGS = DUMMY_DOGS.filter(d => d.id != dogId);
-    res.status(200).json({message: "deleted"});
+    res.status(200).json({message: deletedDog.title + " was deleted."});
 };
 
 
