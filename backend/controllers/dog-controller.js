@@ -112,14 +112,16 @@ const updateDog = async (req, res, next) => {
     // error with database
     console.log(err);
     return next(
-      new HttpError("Something went wrong, could not find dog for updates.", 500)
+      new HttpError(
+        "Something went wrong, could not find dog for updates.",
+        500
+      )
     );
   }
-  
 
-//   if (dog.owner.toString() !== req.user.userId) {
-//     return next(error("You can't edit dogs that don't belong to you!", 401));
-//   }
+  //   if (dog.owner.toString() !== req.user.userId) {
+  //     return next(error("You can't edit dogs that don't belong to you!", 401));
+  //   }
 
   dog.name = name;
   dog.description = description;
@@ -137,15 +139,28 @@ const updateDog = async (req, res, next) => {
   res.status(200).json({ dog: dog.toObject({ getters: true }) });
 };
 
-const deleteDog = (req, res, next) => {
+const deleteDog = async (req, res, next) => {
     const dogId = req.params.did
-    const deletedDog = DUMMY_DOGS.find(d => d.id === dogId)
-    if (!deletedDog) {
-        throw new HttpError('Could not find a dog for this id.', 404);
-    }
-    
-    DUMMY_DOGS = DUMMY_DOGS.filter(d => d.id != dogId);
-    res.status(200).json({message: deletedDog.name + " was deleted."});
+
+    let dog;
+  try {
+    dog = await Dog.findById(dogId);
+  } catch (err) {
+    return next(
+      new HttpError("Something went wrong, could not delete dog, please try again later.", 500)
+    );
+  } 
+
+  try {
+    await dog.deleteOne();
+    } catch (err) {
+        console.log(err)
+    return next(
+      new HttpError("Something went wrong, could not delete dog2, please try again later.", 500)
+    );
+  } 
+   
+    res.status(200).json({message: dog.name + " was deleted."});
 };
 
 
