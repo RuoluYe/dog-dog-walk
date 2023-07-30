@@ -5,21 +5,6 @@ const HttpError = require('../models/http-error');
 const getCoords = require('../util/location');
 const Dog = require('../models/dog');
 
-
-let DUMMY_DOGS = [
-    {
-        id: 'd1',
-        name: 'dog 1',
-        description: 'shiba inu',
-        location: {
-            lat: 40,
-            lng: -73
-        },
-        address: "~",
-        owner: 'u1'
-    }
-];
-
 const getDogById = async (req,res,next) => {
     const dogId = req.params.did; // {did: 'd1'}
     let dog;
