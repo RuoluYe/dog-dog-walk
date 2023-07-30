@@ -6,8 +6,15 @@ const User = require('../models/user');
 
 
 
-const getUsers = (req, res, next) => {
-    res.json({ users: DUMMY_USERS });
+const getUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}, "-password"); // or 'email name'
+  } catch (err) {
+    return next(new HttpError("Fetching users failed, please try again", 500));
+  }
+
+  res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {
@@ -45,7 +52,6 @@ const signup = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (err) {
-    console.log(err);
     return next(new HttpError("Creating user failed, please try again", 500));
   }
 
