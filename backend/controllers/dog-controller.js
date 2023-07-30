@@ -39,17 +39,21 @@ const getDogById = async (req,res,next) => {
     res.json({ dog: dog.toObject( {getters: true}) }); 
 };
 
-const getDogsByUserId = (req,res,next) => {
-    const userId = req.params.uid; 
-    const dogs = DUMMY_DOGS.filter(d => {
-        return d.owner === userId;
-    });
-    if (!dogs|| getDogsByUserId.length ===0) {
-        return next( 
-            new HttpError('could not find dogs for this user id', 404)
-        );
-    }
-    res.json({dogs}); 
+const getDogsByUserId = async (req,res,next) => {
+  const userId = req.params.uid;
+  let dogs;
+  try {
+    dogs = await Dog.find({ owner: userId });
+  } catch (err) {
+    return next(
+      new HttpError("Fetching dogs failed, please try again later.", 500)
+    );
+  }
+
+  if (!dogs || dogs.length === 0) {
+    return next(new HttpError("Could not find dogs for this user id.", 404));
+  }
+  res.json({ dogs: dogs.map(dog => dog.toObject({ getters: true})) });
 };
 
 const createDog = async (req, res, next) => {
