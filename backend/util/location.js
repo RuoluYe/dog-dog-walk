@@ -1,3 +1,4 @@
+// get location coords on google map
 const axios = require("axios");
 const HttpError = require("../models/http-error");
 const API_KEY = "AIzaSyAyyIWuVDVjpWzKrcHkVx5crLoGYqibl1c";

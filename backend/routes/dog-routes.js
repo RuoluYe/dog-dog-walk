@@ -12,7 +12,7 @@ router.get("/user/:uid", dogControllers.getDogsByUserId);
 router.post(
   "/",
   [
-    check("title").not().isEmpty(),
+    check("name").not().isEmpty(),
     check("description").isLength({ min: 5 }),
     check("address").not().isEmpty(),
   ],
@@ -21,7 +21,7 @@ router.post(
 
 router.patch(
   "/:did",
-  [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
+  [check("name").not().isEmpty(), check("description").isLength({ min: 5 })],
   dogControllers.updateDog
 );
 

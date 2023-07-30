@@ -1,5 +1,6 @@
 const express = require('express');
 const bp = require('body-parser');
+const mongoose = require('mongoose');
 
 const dogRoutes = require('./routes/dog-routes');
 const usersRoutes = require('./routes/user-routes');
@@ -28,4 +29,12 @@ app.use((err,req,res,next) => {
 
 })
 
-app.listen(5000)
+mongoose
+  .connect('mongodb+srv://lu:NJ85V79erIFS8Z3F@cluster0.ufvouck.mongodb.net/dogdog?retryWrites=true&w=majority')
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
