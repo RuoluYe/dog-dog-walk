@@ -92,25 +92,49 @@ const createDog = async (req, res, next) => {
   res.status(201).json(createdDog); // 201 for success created
 };
 
-const updateDog = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return next(
-        new HttpError("Invalid inputs passed, please check your data.", 422)
-      );
-    }
+const updateDog = async (req, res, next) => {
+  // check if input correct
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
 
-    const { name, description} = req.body;
-    const dogId = req.params.did;
+  // get input
+  const { name, description } = req.body;
+  const dogId = req.params.did;
 
-    const updatedDog = DUMMY_DOGS.find(d => d.id === dogId);
-    const dogIndex = DUMMY_DOGS.findIndex(d => d.id === dogId);
-    updatedDog.name = name;
-    updatedDog.description = description;
+  let dog;
+  try {
+    dog = await Dog.findById(dogId);
+  } catch (err) {
+    // error with database
+    console.log(err);
+    return next(
+      new HttpError("Something went wrong, could not find dog for updates.", 500)
+    );
+  }
+  
 
-    DUMMY_DOGS[dogIndex] = updatedDog;
+//   if (dog.owner.toString() !== req.user.userId) {
+//     return next(error("You can't edit dogs that don't belong to you!", 401));
+//   }
 
-    res.status(200).json({dog: updatedDog});
+  dog.name = name;
+  dog.description = description;
+  try {
+    await dog.save();
+  } catch (err) {
+    return next(
+      new HttpError(
+        "Something went wrong, could not update dog, please try again later..",
+        500
+      )
+    );
+  }
+
+  res.status(200).json({ dog: dog.toObject({ getters: true }) });
 };
 
 const deleteDog = (req, res, next) => {
