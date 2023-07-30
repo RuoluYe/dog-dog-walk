@@ -150,7 +150,7 @@ const deleteDog = async (req, res, next) => {
 
   let dog;
   try {
-    dog = await Dog.findById(dogId);
+    dog = await Dog.findById(dogId).populate("owner");
   } catch (err) {
     return next(
       new HttpError(
@@ -160,13 +160,22 @@ const deleteDog = async (req, res, next) => {
     );
   }
 
+  //check if dog exist
+  if (!dog) {
+    return next(
+      new HttpError(
+        "Could not find dog for this id, please try again later.",
+        404
+      )
+    );
+  }
+
   try {
     await dog.deleteOne();
   } catch (err) {
-    console.log(err);
     return next(
       new HttpError(
-        "Something went wrong, could not delete dog2, please try again later.",
+        "Something went wrong, could not delete dog, please try again later.",
         500
       )
     );
