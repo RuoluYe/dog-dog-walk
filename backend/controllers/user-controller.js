@@ -1,9 +1,8 @@
 const uuid = require('uuid').v4;
 const { validationResult } = require('express-validator');
 
-
 const HttpError = require('../models/http-error');
-
+const User = require('../models/user');
 
 
 
@@ -11,29 +10,41 @@ const getUsers = (req, res, next) => {
     res.json({ users: DUMMY_USERS });
 };
 
-const signup = (req, res, next) => {
+const signup = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        throw new HttpError('Invalid inputs passed, please check your data.', 422);
+        return next(new HttpError('Invalid inputs passed, please check your data.', 422));
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, dogs } = req.body;
 
-    const hasUser = DUMMY_USERS.find(u => u.email ===email)
-    if (hasUser) {
-        throw new HttpError('Could not create user, email already exist.', 422);
+    let existingUser;
+    try {
+        existingUser = await User.findOne({ email: email })
+    } catch(err) {
+        return next(new HttpError('Signup failed, please try agian later.', 500));
     }
-    
 
-    const createdUser = {
-        id: uuid(),
+    if (existingUser) {
+        return next(new HttpError('User exists already, please login instead.', 422));
+    }
+
+    const createdUser = new User({
         name,
         email,
-        password
-    };
+        image:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        password, // will add encyption later
+        dogs
+    });
 
-    DUMMY_USERS.push(createdUser);
-    res.status(201).json({user: createdUser});
+    try {
+        await createdUser.save();
+      } catch (err) {
+        console.log(err)
+        return next(new HttpError("Creating user failed, please try again", 500));
+      }
+
+    res.status(201).json({user: createdUser.toObject({getters:true})});
 };
 
 const login = (req, res, next) => {
@@ -41,7 +52,7 @@ const login = (req, res, next) => {
 
     const identifiedUser = DUMMY_USERS.find(u => u.email === email);
     if (!identifiedUser || identifiedUser.password !== password) {
-        throw new HttpError('could not identify user', 401);
+        return next(new HttpError('could not identify user', 401));
     };
 
     res.json({message: "logged in"});
