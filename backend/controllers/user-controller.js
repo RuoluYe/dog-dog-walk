@@ -1,10 +1,7 @@
-const uuid = require('uuid').v4;
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 
-const HttpError = require('../models/http-error');
-const User = require('../models/user');
-
-
+const HttpError = require("../models/http-error");
+const User = require("../models/user");
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -46,7 +43,7 @@ const signup = async (req, res, next) => {
     image:
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     password, // will add encyption later
-    dogs: []
+    dogs: [],
   });
 
   try {
@@ -75,7 +72,7 @@ const login = async (req, res, next) => {
     return next(new HttpError("Wrong password, please try agian later.", 401));
   }
 
-  res.json({ message: "logged in" }); 
+  res.json({ message: "logged in" });
 };
 
 exports.getUsers = getUsers;

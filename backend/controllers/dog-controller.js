@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
 const getCoords = require("../util/location");
@@ -8,6 +8,7 @@ const User = require("../models/user");
 
 const getDogById = async (req, res, next) => {
   const dogId = req.params.did; // {did: 'd1'}
+
   let dog;
   try {
     dog = await Dog.findById(dogId);
@@ -27,8 +28,11 @@ const getDogById = async (req, res, next) => {
 
 const getDogsByUserId = async (req, res, next) => {
   const userId = req.params.uid;
+
+  //let userl
   let dogs;
   try {
+    // user = await User.findById(userId).populate('dogs');
     dogs = await Dog.find({ owner: userId });
   } catch (err) {
     return next(
@@ -36,10 +40,11 @@ const getDogsByUserId = async (req, res, next) => {
     );
   }
 
+  // if (!user || user.dogs.length ===0)
   if (!dogs || dogs.length === 0) {
     return next(new HttpError("Could not find dogs for this user id.", 404));
   }
-  res.json({ dogs: dogs.map((dog) => dog.toObject({ getters: true })) });
+  res.json({ dogs: dogs.map((dog) => dog.toObject({ getters: true })) }); // dogs: user.dogs.map(dog 。。。)
 };
 
 const createDog = async (req, res, next) => {
@@ -74,7 +79,7 @@ const createDog = async (req, res, next) => {
   try {
     user = await User.findById(owner);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return next(new HttpError("Creating dog failed, please try again", 500));
   }
 
@@ -181,7 +186,6 @@ const deleteDog = async (req, res, next) => {
     console.log(err);
     return next(
       new HttpError(
-        
         "Something went wrong, could not delete dog, please try again later.",
         500
       )

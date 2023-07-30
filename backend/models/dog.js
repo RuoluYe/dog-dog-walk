@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -11,7 +11,7 @@ const dogSchema = new Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
   },
-  owner: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
+  owner: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
 });
 
-module.exports = mongoose.model('Dog', dogSchema);
+module.exports = mongoose.model("Dog", dogSchema);
