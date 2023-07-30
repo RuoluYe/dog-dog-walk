@@ -171,10 +171,17 @@ const deleteDog = async (req, res, next) => {
   }
 
   try {
-    await dog.deleteOne();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await dog.deleteOne({ session: sess });
+    dog.owner.dogs.pull(dog);
+    await dog.owner.save({ session: sess });
+    await sess.commitTransaction();
   } catch (err) {
+    console.log(err);
     return next(
       new HttpError(
+        
         "Something went wrong, could not delete dog, please try again later.",
         500
       )
