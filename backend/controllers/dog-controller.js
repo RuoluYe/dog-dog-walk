@@ -20,16 +20,23 @@ let DUMMY_DOGS = [
     }
 ];
 
-const getDogById = (req,res,next) => {
+const getDogById = async (req,res,next) => {
     const dogId = req.params.did; // {did: 'd1'}
-    const dog = DUMMY_DOGS.find(d => {
-        return d.id === dogId;
-    });
+    let dog;
+    try {
+      dog = await Dog.findById(dogId);
+    } catch (err) {
+      // error with database
+      return next(
+        new HttpError("Something went wrong, could not find a dog.", 500)
+      );
+    }
 
     if (!dog) {
-        throw new HttpError('could not find for this dog id',404);
+      // error with finding the specific id
+      return next(new HttpError("Could not find dog for this id.", 404));
     }
-    res.json({dog}); 
+    res.json({ dog: dog.toObject( {getters: true}) }); 
 };
 
 const getDogsByUserId = (req,res,next) => {
