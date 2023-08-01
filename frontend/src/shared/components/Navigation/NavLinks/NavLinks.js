@@ -14,16 +14,16 @@ function NavLinks() {
       <li>
         <NavLink to={"/"} exact>All People</NavLink>
       </li>
-      {/* {authContext.isLoggedIn && ( */}
+      {authContext.isLoggedIn && (
         <li>
           <NavLink to={`/${authContext.userId}/profile`}>My Profile</NavLink>
         </li>
-      {/* )} */}
-      {/* {authContext.isLoggedIn && ( */}
+      )} 
+      {authContext.isLoggedIn && (
         <li>
           <NavLink to={"/dogs/new"}>Add Dog</NavLink>
         </li>
-      {/* )} */}
+      )} 
       {!authContext.isLoggedIn && (
         <li>
           <NavLink to={"/auth"}>Login</NavLink>

@@ -76,7 +76,7 @@ function DogItem(props) {
         }
       >
         <p style={{ margin: "1rem" }}>
-          Are you sure you want to delete this place? This action cannot be
+          Are you sure you want to delete this dog? This action cannot be
           undone!
         </p>
       </Modal>
