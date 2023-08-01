@@ -114,9 +114,9 @@ function DogItem(props) {
             </div>
           </div>
           <div className={classes["place-item__actions"]}>
-            <Button onClick={toggleMapHandler} inverse>
+            {/* <Button onClick={toggleMapHandler} inverse>
               View on map
-            </Button>
+            </Button> */}
             {authContext.userId === props.ownerId && (
               <>
                 <Button to={`/dogs/${props.id}`}>Edit</Button>
