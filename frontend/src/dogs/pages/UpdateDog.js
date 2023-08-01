@@ -24,7 +24,7 @@ function UpdateDog() {
   const [place, setPlace] = useState();
 
   const [formState, inputHandler, setFormData] = useForm({
-    title: {
+    name: {
       value: "",
       isValid: false
     },
@@ -44,8 +44,8 @@ function UpdateDog() {
         setPlace(data.place);
         setFormData(
           {
-            title: {
-              value: data.place.title,
+            name: {
+              value: data.place.name,
               isValid: true
             },
             description: {
@@ -75,7 +75,7 @@ function UpdateDog() {
     return (
       <div className="center">
         <Card>
-          <h2>Couldn't find place!</h2>
+          <h2>Couldn't find dog!</h2>
         </Card>
       </div>
     );
@@ -89,7 +89,7 @@ function UpdateDog() {
         `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`,
         "PATCH",
         JSON.stringify({
-          title: formState.inputs.title.value,
+          name: formState.inputs.name.value,
           description: formState.inputs.description.value
         }),
         {
@@ -110,13 +110,13 @@ function UpdateDog() {
       {!isLoading && place && (
         <form className={classes["place-form"]} onSubmit={submitHandler}>
           <Input
-            id="title"
+            id="name"
             element="input"
             type="text"
-            label="Title"
+            label="Dog name"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Please enter a valid title!"
-            initValue={place.title}
+            errorText="Please enter a valid name!"
+            initValue={place.name}
             initValid={true}
             onInput={inputHandler}
           />
@@ -131,7 +131,7 @@ function UpdateDog() {
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
-            Update place
+            Update dog infomation
           </Button>
         </form>
       )}

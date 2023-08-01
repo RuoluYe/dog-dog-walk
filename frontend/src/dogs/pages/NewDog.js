@@ -19,15 +19,15 @@ import classes from "./DogForm.css";
 function NewDog() {
   const history = useHistory();
   const authContext = useContext(AuthContext);
-  const { isLoading, error, sendRequest, clearError } = useHttp();
+  const { isLoading, error, sendRequest, clearError } = useHttp`````  `();
   const [formState, inputHandler] = useForm(
     {
-      title: {
+      name: {
         value: "",
         isValid: false
       },
       description: {
-        value: "",
+        value: "e.g. When does your dog need to be walked? What should walkers be mindful of?",
         isValid: false
       },
       address: {
@@ -48,7 +48,7 @@ function NewDog() {
     try {
       const formData = new FormData();
 
-      formData.append("title", formState.inputs.title.value);
+      formData.append("name", formState.inputs.name.value);
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
       formData.append("image", formState.inputs.image.value);
@@ -74,18 +74,19 @@ function NewDog() {
       <form className={classes["place-form"]} onSubmit={placeSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
         <Input
-          id="title"
+          id="name"
           element="input"
           type="text"
-          label="Title"
+          label="Dog Name"
           validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid title!"
+          errorText="Please enter a valid name!"
           onInput={inputHandler}
         />
         <Input
           id="description"
           label="Description"
-          validators={[VALIDATOR_MINLENGTH(5)]}
+          // validators={[VALIDATOR_MINLENGTH(5)]}
+          validators={[]}
           errorText="At least five characters!"
           onInput={inputHandler}
         />
@@ -103,7 +104,7 @@ function NewDog() {
           errorText="Please provide an image!"
         />
         <Button type="submit" disabled={!formState.isValid}>
-          Add place
+          Add dog
         </Button>
       </form>
     </>
@@ -111,3 +112,4 @@ function NewDog() {
 }
 
 export default NewDog;
+// usecallback 2 40 13

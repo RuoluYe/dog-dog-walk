@@ -63,3 +63,5 @@ export default function useForm(inputs, isValid) {
 
   return [formState, inputHandler, setFormData];
 }
+
+//p5 2:40 3:07
