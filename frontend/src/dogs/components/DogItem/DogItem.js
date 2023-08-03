@@ -30,7 +30,7 @@ function DogItem(props) {
 
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${props.id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/dog/${props.id}`,
         "DELETE",
         null,
         {

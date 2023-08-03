@@ -19,7 +19,7 @@ import classes from "./DogForm.css";
 function NewDog() {
   const history = useHistory();
   const authContext = useContext(AuthContext);
-  const { isLoading, error, sendRequest, clearError } = useHttp`````  `();
+  const { isLoading, error, sendRequest, clearError } = useHttp();
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -54,7 +54,7 @@ function NewDog() {
       formData.append("image", formState.inputs.image.value);
 
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places`,
+        `${process.env.REACT_APP_BACKEND_URL}/dog`,
         "POST",
         formData,
         {

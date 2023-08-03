@@ -27,7 +27,7 @@ function DogList(props) {
           address={dog.address}
           ownerId={dog.owner}
           coordinates={dog.location}
-          onDelete={dog.onDelete}
+          onDelete={props.onDelete}
         />
       ))}
     </ul>

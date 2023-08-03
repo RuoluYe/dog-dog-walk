@@ -15,13 +15,14 @@ import { AuthContext } from "../../shared/contexts/auth-context";
 
 import classes from "./DogForm.css";
 import Card from "../../shared/components/UI/Card/Card";
+import DogItem from "../components/DogItem/DogItem";
 
 function UpdateDog() {
   const history = useHistory();
-  const placeId = useParams().placeId;
+  const dogId = useParams().dogId;
   const authContext = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttp();
-  const [place, setPlace] = useState();
+  const [dog, setDog] = useState();
 
   const [formState, inputHandler, setFormData] = useForm({
     name: {
@@ -35,21 +36,21 @@ function UpdateDog() {
   });
 
   useEffect(() => {
-    async function fetchPlace() {
+    async function fetchDog() {
       try {
         const data = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`
+          `${process.env.REACT_APP_BACKEND_URL}/dog/${dogId}`
         );
 
-        setPlace(data.place);
+        setDog(data.dog);
         setFormData(
           {
             name: {
-              value: data.place.name,
+              value: data.dog.name,
               isValid: true
             },
             description: {
-              value: data.place.description,
+              value: data.dog.description,
               isValid: true
             }
           },
@@ -60,8 +61,8 @@ function UpdateDog() {
       }
     }
 
-    fetchPlace();
-  }, [setFormData, sendRequest, placeId]);
+    fetchDog();
+  }, [setFormData, sendRequest, dogId]);
 
   if (isLoading) {
     return (
@@ -71,7 +72,7 @@ function UpdateDog() {
     );
   }
 
-  if (!place && !error) {
+  if (!dog && !error) {
     return (
       <div className="center">
         <Card>
@@ -86,7 +87,7 @@ function UpdateDog() {
 
     try {
       await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/dog/${dogId}`,
         "PATCH",
         JSON.stringify({
           name: formState.inputs.name.value,
@@ -101,13 +102,13 @@ function UpdateDog() {
       console.log(error);
     }
 
-    history.push(`/${authContext.userId}/places`);
+    history.push(`/${authContext.userId}/profile`);
   }
 
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      {!isLoading && place && (
+      {!isLoading && dog && (
         <form className={classes["place-form"]} onSubmit={submitHandler}>
           <Input
             id="name"
@@ -116,7 +117,7 @@ function UpdateDog() {
             label="Dog name"
             validators={[VALIDATOR_REQUIRE()]}
             errorText="Please enter a valid name!"
-            initValue={place.name}
+            initValue={dog.name}
             initValid={true}
             onInput={inputHandler}
           />
@@ -126,7 +127,7 @@ function UpdateDog() {
             label="Description"
             validators={[VALIDATOR_MINLENGTH(5)]}
             errorText="At least five characters!"
-            initValue={place.description}
+            initValue={dog.description}
             initValid={true}
             onInput={inputHandler}
           />

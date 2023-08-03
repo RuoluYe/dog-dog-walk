@@ -21,7 +21,7 @@ function NavLinks() {
       )} 
       {authContext.isLoggedIn && (
         <li>
-          <NavLink to={"/dogs/new"}>Add Dog</NavLink>
+          <NavLink to={"/dog/new"}>Add Dog</NavLink>
         </li>
       )} 
       {!authContext.isLoggedIn && (
