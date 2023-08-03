@@ -10,6 +10,17 @@ const app = express();
 
 app.use(bp.json());
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+ 
+  next();
+})
+
 app.use('/api/dog',dogRoutes);
 app.use('/api/users', usersRoutes);
 
@@ -24,7 +35,7 @@ app.use((err,req,res,next) => {
         return next(err);
     }
     // not response sent yet
-    res.status(err.code || 500);
+    res.status(err.code || 500); // changed err.code into err.status
     res.json({message: err.message || 'unknow error'});
 
 })

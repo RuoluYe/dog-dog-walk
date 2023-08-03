@@ -16,6 +16,7 @@ import useHttp from "../../../shared/hooks/http-hook";
 import { AuthContext } from "../../../shared/contexts/auth-context";
 
 import classes from "./Auth.module.css";
+import HttpError from "../../../../../backend/models/http-error";
 
 function Auth() {
   const authContext = useContext(AuthContext);
@@ -62,6 +63,8 @@ function Auth() {
       }
     } else {
       try {
+      
+      try {
         const formData = new FormData();
 
         formData.append("email", formState.inputs.email.value);
@@ -86,6 +89,8 @@ function Auth() {
         console.log(error);
       }
     }
+
+    
   }
 
   function switchAuthModeHandler() {
