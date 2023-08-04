@@ -47,6 +47,7 @@ function ImageUpload(props) {
 
   return (
     <div className={classes["form-control"]}>
+      {/* file picker */}
       <input
         id={props.id}
         ref={filePickerRef}

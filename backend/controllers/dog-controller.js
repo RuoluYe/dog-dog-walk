@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
@@ -69,8 +71,7 @@ const createDog = async (req, res, next) => {
     description,
     address,
     location: coordinates,
-    image:
-      "https://media.istockphoto.com/id/1053621774/zh/%E5%90%91%E9%87%8F/%E5%8F%AF%E6%84%9B%E7%9A%84%E8%8A%9D-inu-%E7%8B%97%E5%8B%95%E7%95%AB%E7%89%87%E5%9C%96%E7%A4%BA-%E5%90%91%E9%87%8F%E4%BE%8B%E8%AD%89.jpg?s=612x612&w=0&k=20&c=RuyQUd3l2voM1s5JHi8vyKBhRT_1JNEb-bXv9c7UyXc=",
+    image:req.file.path,
     owner, // user id
   });
 
@@ -175,6 +176,8 @@ const deleteDog = async (req, res, next) => {
     );
   }
 
+  const imagePath = dog.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -191,6 +194,10 @@ const deleteDog = async (req, res, next) => {
       )
     );
   }
+
+  fs.unlink(imagePath, err => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: dog.name + " was deleted." });
 };

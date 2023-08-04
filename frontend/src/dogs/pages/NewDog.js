@@ -51,6 +51,7 @@ function NewDog() {
       formData.append("name", formState.inputs.name.value);
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
+      formData.append("owner", authContext.userId);
       formData.append("image", formState.inputs.image.value);
 
       await sendRequest(

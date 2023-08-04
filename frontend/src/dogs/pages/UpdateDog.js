@@ -15,7 +15,7 @@ import { AuthContext } from "../../shared/contexts/auth-context";
 
 import classes from "./DogForm.css";
 import Card from "../../shared/components/UI/Card/Card";
-import DogItem from "../components/DogItem/DogItem";
+// import DogItem from "../components/DogItem/DogItem";
 
 function UpdateDog() {
   const history = useHistory();

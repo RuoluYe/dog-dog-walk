@@ -2,6 +2,7 @@ const express = require("express");
 const { check } = require("express-validator");
 
 const dogControllers = require("../controllers/dog-controller");
+const fileUpload = require('../middleware/file-upload');
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ router.get("/user/:uid", dogControllers.getDogsByUserId);
 
 router.post(
   "/",
+  fileUpload.single('image'),
   [
     check("name").not().isEmpty(),
     check("description").isLength({ min: 5 }),

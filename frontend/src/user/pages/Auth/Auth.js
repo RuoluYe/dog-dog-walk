@@ -16,7 +16,6 @@ import useHttp from "../../../shared/hooks/http-hook";
 import { AuthContext } from "../../../shared/contexts/auth-context";
 
 import classes from "./Auth.module.css";
-import HttpError from "../../../../../backend/models/http-error";
 
 function Auth() {
   const authContext = useContext(AuthContext);
@@ -62,7 +61,6 @@ function Auth() {
         console.log(error);
       }
     } else {
-      try {
       
       try {
         const formData = new FormData();
@@ -75,7 +73,8 @@ function Auth() {
         console.log(formData);
 
         const response = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
+          //`${process.env.REACT_APP_BACKEND_URL}/users/signup`,
+          'http://localhost:5000/api/users/signup',
           "POST",
           formData
         );
