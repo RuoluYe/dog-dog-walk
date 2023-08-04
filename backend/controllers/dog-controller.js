@@ -131,9 +131,10 @@ const updateDog = async (req, res, next) => {
     );
   }
 
-  //   if (dog.owner.toString() !== req.user.userId) {
-  //     return next(error("You can't edit dogs that don't belong to you!", 401));
-  //   }
+  if (dog.owner.toString() !== req.userData.userId) {
+    return next(new HttpError("You are not allow to edit this dog.", 401));
+  }
+
 
   dog.name = name;
   dog.description = description;
@@ -174,6 +175,10 @@ const deleteDog = async (req, res, next) => {
         404
       )
     );
+  }
+
+  if (dog.owner.id !== req.userData.userId) {
+    return next(new HttpError("You are not allowed to edit this dog.", 401));
   }
 
   const imagePath = dog.image;
