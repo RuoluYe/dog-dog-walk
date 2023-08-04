@@ -3,12 +3,15 @@ const { check } = require("express-validator");
 
 const dogControllers = require("../controllers/dog-controller");
 const fileUpload = require('../middleware/file-upload');
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
 router.get("/:did", dogControllers.getDogById);
 
 router.get("/user/:uid", dogControllers.getDogsByUserId);
+
+router.use(checkAuth);
 
 router.post(
   "/",
