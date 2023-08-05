@@ -8,6 +8,7 @@ export default function useAuth() {
   const [tokenExpDate, setTokenExpDate] = useState(null);
 
   const login = useCallback((userId, token, expDate) => {
+    // log out time
     const tokenExpDate =
       expDate || new Date(new Date().getTime() + 1000 * 60 * 60);
 
@@ -33,6 +34,7 @@ export default function useAuth() {
     localStorage.removeItem("user");
   }, []);
 
+  // keep loggin in
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("user"));
 
@@ -44,6 +46,7 @@ export default function useAuth() {
     }
   }, [login]);
 
+  // auto log out, when log out, clear timer, when log in, set a new timer
   useEffect(() => {
     if (token && tokenExpDate) {
       const remainingTime = tokenExpDate.getTime() - new Date().getTime();
