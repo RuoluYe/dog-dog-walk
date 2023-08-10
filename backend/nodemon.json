@@ -1,0 +1,9 @@
+{
+    "env": {
+        "DB_USER": "lu",
+        "DB_PASSWORD": "NJ85V79erIFS8Z3F",
+        "DB_NAME": "dogdog",
+        "GOOGLE_API_KEY": "...",
+        "JWT_KEY": "yaoshi"
+    }
+}
