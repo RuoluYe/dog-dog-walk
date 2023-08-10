@@ -57,7 +57,7 @@ const createDog = async (req, res, next) => {
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
   }
-  const { name, description, address, owner } = req.body;
+  const { name, description, address} = req.body;
 
   let coordinates;
   try {
@@ -72,13 +72,13 @@ const createDog = async (req, res, next) => {
     address,
     location: coordinates,
     image:req.file.path,
-    owner, // user id
+    owner: req.userData.userId, // user id
   });
 
   // check if owner exists
   let user;
   try {
-    user = await User.findById(owner);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     console.log(err);
     return next(new HttpError("Creating dog failed, please try again", 500));

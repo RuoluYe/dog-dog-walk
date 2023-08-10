@@ -10,7 +10,7 @@ module.exports = (req,res,next) => {
       if (!token) {
         throw new Error("Authentication failed!");
       }
-      const decodedToken = JsonWebTokenError.verify(token, 'yaoshi');
+      const decodedToken = JsonWebTokenError.verify(token, process.env.JWT_KEY);
       req.userData = {userId: decodedToken.userId};
       next();
     } catch (err) {
