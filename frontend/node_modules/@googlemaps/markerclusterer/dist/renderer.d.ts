@@ -15,6 +15,7 @@
  */
 /// <reference types="google.maps" />
 import { Cluster } from "./cluster";
+import { Marker } from "./marker-utils";
 /**
  * Provides statistics on all clusters in the current render cycle for use in {@link Renderer.render}.
  */
@@ -31,11 +32,11 @@ export declare class ClusterStats {
             max: number;
         };
     };
-    constructor(markers: google.maps.Marker[], clusters: Cluster[]);
+    constructor(markers: Marker[], clusters: Cluster[]);
 }
 export interface Renderer {
     /**
-     * Turn a {@link Cluster} into a `google.maps.Marker`.
+     * Turn a {@link Cluster} into a `Marker`.
      *
      * Below is a simple example to create a marker with the number of markers in the cluster as a label.
      *
@@ -46,7 +47,7 @@ export interface Renderer {
      * });
      * ```
      */
-    render(cluster: Cluster, stats: ClusterStats): google.maps.Marker;
+    render(cluster: Cluster, stats: ClusterStats, map: google.maps.Map): Marker;
 }
 export declare class DefaultRenderer implements Renderer {
     /**
@@ -87,5 +88,5 @@ export declare class DefaultRenderer implements Renderer {
      * });
      * ```
      */
-    render({ count, position }: Cluster, stats: ClusterStats): google.maps.Marker;
+    render({ count, position }: Cluster, stats: ClusterStats, map: google.maps.Map): Marker;
 }

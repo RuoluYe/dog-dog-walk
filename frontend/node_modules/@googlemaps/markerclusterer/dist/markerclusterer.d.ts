@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 /// <reference types="google.maps" />
-import { Algorithm } from "./algorithms";
+import { Algorithm, AlgorithmOptions } from "./algorithms";
 import { Renderer } from "./renderer";
 import { Cluster } from "./cluster";
 import { OverlayViewSafe } from "./overlay-view-safe";
+import { Marker } from "./marker-utils";
 export type onClusterClickHandler = (event: google.maps.MapMouseEvent, cluster: Cluster, map: google.maps.Map) => void;
 export interface MarkerClustererOptions {
-    markers?: google.maps.Marker[];
+    markers?: Marker[];
     /**
      * An algorithm to cluster markers. Default is {@link SuperClusterAlgorithm}. Must
      * provide a `calculate` method accepting {@link AlgorithmInput} and returning
      * an array of {@link Cluster}.
      */
     algorithm?: Algorithm;
+    algorithmOptions?: AlgorithmOptions;
     map?: google.maps.Map | null;
     /**
      * An object that converts a {@link Cluster} into a `google.maps.Marker`.
@@ -52,18 +54,17 @@ export declare class MarkerClusterer extends OverlayViewSafe {
     /** @see {@link MarkerClustererOptions.algorithm} */
     protected algorithm: Algorithm;
     protected clusters: Cluster[];
-    protected markers: google.maps.Marker[];
+    protected markers: Marker[];
     /** @see {@link MarkerClustererOptions.renderer} */
     protected renderer: Renderer;
     /** @see {@link MarkerClustererOptions.map} */
     protected map: google.maps.Map | null;
-    /** @see {@link MarkerClustererOptions.maxZoom} */
     protected idleListener: google.maps.MapsEventListener;
-    constructor({ map, markers, algorithm, renderer, onClusterClick, }: MarkerClustererOptions);
-    addMarker(marker: google.maps.Marker, noDraw?: boolean): void;
-    addMarkers(markers: google.maps.Marker[], noDraw?: boolean): void;
-    removeMarker(marker: google.maps.Marker, noDraw?: boolean): boolean;
-    removeMarkers(markers: google.maps.Marker[], noDraw?: boolean): boolean;
+    constructor({ map, markers, algorithmOptions, algorithm, renderer, onClusterClick, }: MarkerClustererOptions);
+    addMarker(marker: Marker, noDraw?: boolean): void;
+    addMarkers(markers: Marker[], noDraw?: boolean): void;
+    removeMarker(marker: Marker, noDraw?: boolean): boolean;
+    removeMarkers(markers: Marker[], noDraw?: boolean): boolean;
     clearMarkers(noDraw?: boolean): void;
     /**
      * Recalculates and draws all the marker clusters.
